@@ -6,7 +6,7 @@ A simple full-stack web application that displays upcoming **basketball matches*
 
 ## 📸 Screenshot
 
-![Screenshot](screenshot.png)  
+![Screenshot](BasketballWebsiteScreenshot.png)  
 > *You can replace `screenshot.png` with the actual image filename once uploaded to the repo.*
 
 ---
@@ -34,6 +34,4 @@ A simple full-stack web application that displays upcoming **basketball matches*
 - **Tools:** Axios, CORS
 
 ---
-
-## 📂 Folder Structure
 
