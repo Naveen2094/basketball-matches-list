@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upcoming Basketball Matches</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+  font-family: 'Open Sans', sans-serif;
+  background-image: url('basketballbg.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: #e5e7eb;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+
+
+    .container {
+      max-width: 750px;
+      width: 100%;
+      background: #22272e;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      padding: 30px 40px;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    h1 {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      font-size: 2.4rem;
+      color: #fbbf24; 
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 1.2px;
+    }
+
+    #matches {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .match {
+      background: #1f2937;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+      cursor: default;
+      word-wrap: break-word; 
+      white-space: normal;
+    }
+    .match:hover {
+      background: #374151; 
+    }
+
+    .teams {
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: #fbbf24;
+      flex: 3;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .date {
+      font-weight: 400;
+      font-size: 1rem;
+      color: #d1d5db;
+      flex: 1;
+      text-align: right;
+      font-family: 'Courier New', Courier, monospace;
+      letter-spacing: 0.5px;
+      user-select: none;
+      white-space: nowrap;
+      padding-left: 15px;
+    }
+
+    .error, #matches:empty {
+      text-align: center;
+      color: #ef4444; 
+      font-weight: 600;
+      padding: 20px 0;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px 20px;
+      }
+      .match {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .date {
+        text-align: left;
+        white-space: normal;
+        padding-left: 0;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏀 Upcoming Basketball Matches </h1>
+    <div id="matches">Loading...</div>
+  </div>
+
+  <script>
+    async function fetchMatches() {
+      try {
+        const response = await fetch('http://localhost:3000/api/upcoming-basketball');
+        const data = await response.json();
+
+        const container = document.getElementById('matches');
+        container.innerHTML = '';
+
+        if (!data.length) {
+          container.innerHTML = '<p class="error">No upcoming matches found.</p>';
+          return;
+        }
+
+        data.forEach(match => {
+          const matchDiv = document.createElement('div');
+          matchDiv.className = 'match';
+
+          matchDiv.innerHTML = `
+            <div class="teams">${match.home_team} VS ${match.away_team}</div>
+            <div class="date">${match.date}</div>
+          `;
+
+          container.appendChild(matchDiv);
+        });
+      } catch (error) {
+        const container = document.getElementById('matches');
+        container.innerHTML = '<p class="error">Failed to load matches.</p>';
+        console.error('Fetch error:', error);
+      }
+    }
+
+    fetchMatches();
+  </script>
+</body>
+</html>
